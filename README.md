@@ -16,7 +16,7 @@ value from data whilst ensuring it is properly governed.
 
 [Go to the main Egeria site](https://egeria-project.org)
 
-This repository contains three database connectors, visit each of them for specific details: [postgres connector](egeria-connector-postgres/README.md), [jdbc integration connector](jdbc-integration-connector/README.MD), [jdbc resource connector](jdbc-resource-connector/README.MD)
+This repository contains several database connectors, visit each of them for specific details: [jdbc integration connector](jdbc-integration-connector/README.MD), [jdbc resource connector](jdbc-resource-connector/README.MD)
 
 Further information on configuring an integration connector can be found in  [Configuring the Integration Services](https://egeria-project.org/guides/admin/servers/configuring-the-integration-services/) .
 
