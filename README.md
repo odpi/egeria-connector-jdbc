@@ -5,7 +5,8 @@
 
 [![GitHub](https://img.shields.io/github/license/odpi/egeria)](LICENSE)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3044/badge)](https://bestpractices.coreinfrastructure.org/projects/3044)
-[![Maven Central](https://img.shields.io/maven-central/v/org.odpi.egeria/egeria-connector-postgres)](https://mvnrepository.com/artifact/org.odpi.egeria/egeria-connector-postgres)
+[![Maven Central - JDBC integration connector](https://img.shields.io/maven-central/v/org.odpi.egeria/egeria-connector-integration-jdbc)](https://mvnrepository.com/artifact/org.odpi.egeria/egeria-connector-integration-jdbc)
+[![Maven Central - JDBC resource connector](https://img.shields.io/maven-central/v/org.odpi.egeria/egeria-connector-resource-jdbc)](https://mvnrepository.com/artifact/org.odpi.egeria/egeria-connector-resource-jdbc)
 
 # Egeria - Open Metadata and Governance
   
