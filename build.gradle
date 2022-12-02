@@ -54,15 +54,16 @@ allprojects {
     // Assign variables for any constraints
     ext {
         // add version variables here
-        egeriaversion='3.12'
-        cachingconnectorversion = '1.0-SNAPSHOT'
+        egeriaversion='3.13'
+        jacksonVersion = '2.14.0'
     }
 
     dependencies {
         implementation platform("org.odpi.egeria:egeria:${egeriaversion}")
         constraints {
-            // Only include versions not already defined in egeria - or which need overriding
-            compileOnly "org.odpi.egeria:egeria-connector-omrs-caching:${cachingconnectorversion}"
+            implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+            implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+            implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
         }
     }
 
