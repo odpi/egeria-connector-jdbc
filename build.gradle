@@ -10,11 +10,11 @@
 plugins {
     id "io.freefair.aggregate-javadoc" version "6.5.1"
     // Checks for unnecessary dependencies
-    id 'com.autonomousapps.dependency-analysis' version "1.13.1"
+    id 'com.autonomousapps.dependency-analysis' version "1.17.0"
     // helps resolve log implementation clashes
     id 'dev.jacomet.logging-capabilities' version "0.10.0"
     // This plugin helps resolve jakarta/javax dev.jacomet.logging-capabilities
-    id 'de.jjohannes.java-ecosystem-capabilities' version "0.6"
+    id 'org.gradlex.java-ecosystem-capabilities' version "1.0"
 }
 
 
@@ -30,7 +30,7 @@ allprojects {
     // Mostly java, so default to this for now
     apply plugin: 'java'
     apply plugin: 'jacoco'
-    apply plugin: 'de.jjohannes.java-ecosystem-capabilities'
+    apply plugin: 'org.gradlex.java-ecosystem-capabilities'
     apply plugin: 'dev.jacomet.logging-capabilities'
     // As we've migrated from maven - we'll assume all submodules publish directly to maven
     apply plugin: 'maven-publish'
@@ -54,17 +54,16 @@ allprojects {
     // Assign variables for any constraints
     ext {
         // add version variables here
-        egeriaversion='3.12'
-        postgresversion='42.5.0'
-        cachingconnectorversion = '1.0-SNAPSHOT'
+        egeriaversion='3.13'
+        jacksonVersion = '2.14.0'
     }
 
     dependencies {
         implementation platform("org.odpi.egeria:egeria:${egeriaversion}")
         constraints {
-            // Only include versions not already defined in egeria - or which need overriding
-            implementation "org.postgresql:postgresql:${postgresversion}"
-            compileOnly "org.odpi.egeria:egeria-connector-omrs-caching:${cachingconnectorversion}"
+            implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+            implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+            implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
         }
     }
 
