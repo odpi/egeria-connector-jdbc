@@ -13,6 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: "Merge"
+    if: startsWith(github.repository,'odpi/')
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
@@ -21,17 +22,15 @@ jobs:
           java-version: 11
           distribution: 'temurin'
       - uses: gradle/wrapper-validation-action@v1
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
       # Only for a merge into this repo - not a fork, and just for the main branch
       - name: Build (Publish snapshots to maven central)
-        if: ${{ github.repository == 'odpi/egeria-connector-jdbc' && github.ref == 'refs/heads/main'}}
+        if: ${{ github.ref == 'refs/heads/main'}}
         # TODO: Need to extend build to make use of snapshot repo for publishing
-        run: ./gradlew publish
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: |
+            publish
+            --scan
         # Import secrets needed for code signing and distribution
         env:
           OSSRH_GPG_KEYID: ${{ secrets.OSSRH_GPG_KEYID }}
@@ -41,8 +40,12 @@ jobs:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
       # In other cases just build but don't publish
       - name: Build (no snapshots)
-        if: ${{ github.repository != 'odpi/egeria-connector-jdbc' || github.ref != 'refs/heads/main'}}
-        run: ./gradlew build
+        if: ${{ github.ref != 'refs/heads/main'}}
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: |
+            build
+            --scan
       # --
       - name: Upload Connector
         uses: actions/upload-artifact@v3

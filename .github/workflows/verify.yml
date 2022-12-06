@@ -10,6 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: "PR Verification"
+    if: startsWith(github.repository,'odpi/')
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
@@ -18,15 +19,12 @@ jobs:
           java-version: 11
           distribution: 'temurin'
       - uses: gradle/wrapper-validation-action@v1
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
       - name: Build
-        run: ./gradlew build
-      # --
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: |
+            build
+            --scan
       - name: Upload Connector
         uses: actions/upload-artifact@v3
         with:
