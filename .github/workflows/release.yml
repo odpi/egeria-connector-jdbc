@@ -17,6 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: "Release"
+    if: startsWith(github.repository,'odpi/')
     steps:
       - uses: actions/checkout@v3
         name: Checkout source
@@ -26,16 +27,11 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
       - uses: gradle/wrapper-validation-action@v1
-      # No cache for release code
-      # - name: Cache Gradle packages
-      #  uses: actions/cache@v2.1.4
-      #  with:
-      #    path: ~/.gradle/caches
-      #    key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-      #    restore-keys: ${{ runner.os }}-gradle
       - name: Build with Gradle & Release artifacts
         # TODO: Need to extend build to make use of release repo for publishing
-        run: ./gradlew publish
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publish
         # Import secrets needed for code signing and distribution
         env:
           OSSRH_GPG_KEYID: ${{ secrets.OSSRH_GPG_KEYID }}
