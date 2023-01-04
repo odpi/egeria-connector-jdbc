@@ -55,7 +55,7 @@ allprojects {
     ext {
         // add version variables here
         egeriaversion='3.13'
-        jacksonVersion = '2.14.0'
+        jacksonVersion = '2.14.1'
     }
 
     dependencies {
