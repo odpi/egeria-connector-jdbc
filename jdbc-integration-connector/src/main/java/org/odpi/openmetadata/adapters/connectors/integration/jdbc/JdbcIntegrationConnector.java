@@ -23,6 +23,7 @@ import static org.odpi.openmetadata.adapters.connectors.integration.jdbc.ffdc.Jd
 import static org.odpi.openmetadata.adapters.connectors.integration.jdbc.ffdc.JdbcConnectorAuditCode.EXITING_ON_COMPLETE;
 import static org.odpi.openmetadata.adapters.connectors.integration.jdbc.ffdc.JdbcConnectorAuditCode.EXITING_ON_CONNECTION_FAIL;
 import static org.odpi.openmetadata.adapters.connectors.integration.jdbc.ffdc.JdbcConnectorAuditCode.EXITING_ON_INTEGRATION_CONTEXT_FAIL;
+import static org.odpi.openmetadata.adapters.connectors.integration.jdbc.ffdc.JdbcConnectorAuditCode.EXITING_ON_METADATA_TEST;
 
 public class JdbcIntegrationConnector extends DatabaseIntegratorConnector{
 
@@ -47,6 +48,11 @@ public class JdbcIntegrationConnector extends DatabaseIntegratorConnector{
         DatabaseMetaData databaseMetaData = getDatabaseMetadata(connection);
         if(databaseMetaData == null){
             auditLog.logMessage(exitAction, EXITING_ON_CONNECTION_FAIL.getMessageDefinition(methodName));
+            close(connection);
+            return;
+        }
+        if(!test(databaseMetaData)){
+            auditLog.logMessage(exitAction, EXITING_ON_METADATA_TEST.getMessageDefinition(methodName));
             close(connection);
             return;
         }
@@ -97,14 +103,28 @@ public class JdbcIntegrationConnector extends DatabaseIntegratorConnector{
         return null;
     }
 
+    private boolean test(DatabaseMetaData databaseMetaData){
+        String methodName = "test";
+        try {
+            databaseMetaData.getCatalogs();
+            return true;
+        } catch (SQLException sqlException) {
+            auditLog.logException("Extracting database metadata",
+                    EXCEPTION_READING_JDBC.getMessageDefinition(methodName), sqlException);
+        }
+        return false;
+    }
+
     private JdbcMetadataTransfer createJdbcMetadataTransfer(DatabaseMetaData databaseMetaData){
         String methodName = "createJdbcMetadataTransfer";
         try{
             Map<String, Object> configurationProperties = Optional.ofNullable(this.getConnection().getConfigurationProperties()).orElse(new HashMap<>());
             TransferCustomizations transferCustomizations = new TransferCustomizations(configurationProperties);
             String connectorTypeQualifiedName = jdbcConnector.getConnection().getConnectorType().getConnectorProviderClassName();
-            return new JdbcMetadataTransfer(new JdbcMetadata(databaseMetaData), this.getContext(),
-                    connectorTypeQualifiedName, transferCustomizations, auditLog);
+            String address = jdbcConnector.getConnection().getEndpoint().getAddress();
+            String catalog = (String)configurationProperties.get("catalog");
+            return new JdbcMetadataTransfer(new JdbcMetadata(databaseMetaData), this.getContext(), address,
+                    connectorTypeQualifiedName, catalog, transferCustomizations, auditLog);
         }catch (ConnectorCheckedException e) {
             auditLog.logException("Extracting integration context",
                     EXCEPTION_ON_CONTEXT_RETRIEVAL.getMessageDefinition(methodName), e);

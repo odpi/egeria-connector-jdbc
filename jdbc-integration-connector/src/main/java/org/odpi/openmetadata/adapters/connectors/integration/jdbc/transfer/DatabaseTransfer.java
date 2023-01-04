@@ -2,6 +2,7 @@
 /* Copyright Contributors to the ODPi Egeria project. */
 package org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.odpi.openmetadata.accessservices.datamanager.metadataelements.DatabaseElement;
 import org.odpi.openmetadata.accessservices.datamanager.properties.DatabaseProperties;
 import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.requests.Jdbc;
@@ -19,11 +20,17 @@ import static org.odpi.openmetadata.adapters.connectors.integration.jdbc.ffdc.Jd
 public class DatabaseTransfer {
 
     private final Jdbc jdbc;
+    private final String databaseManagerName;
+    private final String address;
+    private final String catalog;
     private final Omas omas;
     private final AuditLog auditLog;
 
-    public DatabaseTransfer(Jdbc jdbc, Omas omas, AuditLog auditLog) {
+    public DatabaseTransfer(Jdbc jdbc, String databaseManagerName, String address, String catalog, Omas omas, AuditLog auditLog) {
         this.jdbc = jdbc;
+        this.databaseManagerName = databaseManagerName;
+        this.address = address;
+        this.catalog = catalog;
         this.omas = omas;
         this.auditLog = auditLog;
     }
@@ -69,12 +76,10 @@ public class DatabaseTransfer {
         String databaseProductVersion = jdbc.getDatabaseProductVersion();
         String databaseProductName = jdbc.getDatabaseProductName();
         String url = jdbc.getUrl();
-        String urlWithNoParams = url.contains("?") ? url.substring(0, url.indexOf("?")) : url;
-        String catalogFromUrl = urlWithNoParams.substring(url.lastIndexOf("/") + 1);
 
         DatabaseProperties databaseProperties = new DatabaseProperties();
-        databaseProperties.setQualifiedName(urlWithNoParams);
-        databaseProperties.setDisplayName(catalogFromUrl);
+        databaseProperties.setQualifiedName(databaseManagerName + "::" + address);
+        databaseProperties.setDisplayName(StringUtils.isBlank(catalog) ? address : catalog);
         databaseProperties.setDatabaseInstance(driverName);
         databaseProperties.setDatabaseVersion(databaseProductVersion);
         databaseProperties.setDatabaseType(databaseProductName);

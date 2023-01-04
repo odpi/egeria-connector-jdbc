@@ -18,6 +18,12 @@ import java.util.List;
  */
 public class Jdbc {
 
+    public final static String JDBC_CATALOG_KEY = "jdbc.catalog";
+    public final static String JDBC_SCHEMA_KEY = "jdbc.schema";
+    public final static String JDBC_TABLE_KEY = "jdbc.table";
+    public final static String JDBC_COLUMN_KEY = "jdbc.column";
+    public final static String JDBC_TABLE_TYPE_KEY = "jdbc.tableType";
+
     private final JdbcMetadata jdbcMetadata;
     private final AuditLog auditLog;
 

@@ -5,10 +5,13 @@ package org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer;
 import org.odpi.openmetadata.accessservices.datamanager.metadataelements.DatabaseSchemaElement;
 import org.odpi.openmetadata.accessservices.datamanager.properties.DatabaseSchemaProperties;
 import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.model.JdbcSchema;
+import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.requests.Jdbc;
 import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.requests.Omas;
 import org.odpi.openmetadata.frameworks.auditlog.AuditLog;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -70,9 +73,14 @@ public class SchemaTransfer implements Function<JdbcSchema, DatabaseSchemaElemen
      * @return properties
      */
     private DatabaseSchemaProperties buildSchemaProperties(JdbcSchema jdbcSchema) {
+        Map<String, String> additionalProperties = new HashMap<>();
+        additionalProperties.put(Jdbc.JDBC_CATALOG_KEY, jdbcSchema.getTableCatalog());
+        additionalProperties.put(Jdbc.JDBC_SCHEMA_KEY, jdbcSchema.getTableSchem());
+
         DatabaseSchemaProperties jdbcSchemaProperties = new DatabaseSchemaProperties();
         jdbcSchemaProperties.setDisplayName(jdbcSchema.getTableSchem());
         jdbcSchemaProperties.setQualifiedName(databaseQualifiedName + "::" + jdbcSchema.getTableSchem());
+        jdbcSchemaProperties.setAdditionalProperties(additionalProperties);
         return jdbcSchemaProperties;
     }
 

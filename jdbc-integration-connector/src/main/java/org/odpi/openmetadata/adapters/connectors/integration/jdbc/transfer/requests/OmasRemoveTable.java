@@ -41,7 +41,7 @@ class OmasRemoveTable implements Consumer<DatabaseTableElement> {
             List<DatabaseColumnElement> columns = databaseIntegratorContext.getColumnsForDatabaseTable(tableGuid, 0, 0);
             columns.forEach(new OmasRemoveColumn(databaseIntegratorContext, auditLog));
 
-            databaseIntegratorContext.removeDatabaseTable(tableGuid, tableQualifiedName);
+            databaseIntegratorContext.removeDatabaseTable(tableGuid);
         } catch (InvalidParameterException | UserNotAuthorizedException | PropertyServerException e) {
             auditLog.logMessage("Removing table with guid " + tableGuid
                     + " and qualified name " + tableQualifiedName,

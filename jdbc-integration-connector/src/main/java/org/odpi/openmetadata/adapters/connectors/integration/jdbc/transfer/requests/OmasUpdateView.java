@@ -30,7 +30,7 @@ class OmasUpdateView implements BiConsumer<String, DatabaseViewProperties> {
     public void accept(String viewGuid, DatabaseViewProperties viewProperties){
         String methodName = "OmasUpdateView";
         try {
-            databaseIntegratorContext.updateDatabaseView(viewGuid, viewProperties);
+            databaseIntegratorContext.updateDatabaseView(viewGuid, false, viewProperties);
         } catch (InvalidParameterException | UserNotAuthorizedException | PropertyServerException e) {
             auditLog.logException("Updating view with qualifiedName " + viewProperties.getQualifiedName()
                     + " and guid " + viewGuid,
