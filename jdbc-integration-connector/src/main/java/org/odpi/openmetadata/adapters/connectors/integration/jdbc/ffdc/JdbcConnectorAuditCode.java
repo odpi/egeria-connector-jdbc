@@ -79,7 +79,12 @@ public enum JdbcConnectorAuditCode implements AuditLogMessageSet {
             OMRSAuditLogRecordSeverity.INFO,
             "Metadata transfer skipped for following {0}: {1}",
             "Continue execution",
-            "None");
+            "None"),
+    EXITING_ON_METADATA_TEST("JDBC-INTEGRATION-CONNECTOR-00014",
+            OMRSAuditLogRecordSeverity.INFO,
+            "Exiting from method {0} as a result of a failed metadata query test",
+            "Stopping execution",
+            "Investigate log for additional details");
 
 
     private final AuditLogMessageDefinition messageDefinition;

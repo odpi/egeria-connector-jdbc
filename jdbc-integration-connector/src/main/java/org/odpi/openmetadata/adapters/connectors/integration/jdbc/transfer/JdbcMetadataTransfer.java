@@ -41,16 +41,23 @@ public class JdbcMetadataTransfer {
     private static final String COLUMNS = "columns";
     private final Jdbc jdbc;
     private final Omas omas;
+    private final String databaseManagerName;
+    private final String address;
     private final String connectorTypeQualifiedName;
+    private final String catalog;
     private final TransferCustomizations transferCustomizations;
 
     private final AuditLog auditLog;
 
-    public JdbcMetadataTransfer(JdbcMetadata jdbcMetadata, DatabaseIntegratorContext databaseIntegratorContext,
-                                String connectorTypeQualifiedName, TransferCustomizations transferCustomizations, AuditLog auditLog) {
+    public JdbcMetadataTransfer(JdbcMetadata jdbcMetadata, DatabaseIntegratorContext databaseIntegratorContext, String address,
+                                String connectorTypeQualifiedName, String catalog,  TransferCustomizations transferCustomizations,
+                                AuditLog auditLog) {
         this.jdbc = new Jdbc(jdbcMetadata, auditLog);
         this.omas = new Omas(databaseIntegratorContext, auditLog);
+        this.databaseManagerName = databaseIntegratorContext.getDatabaseManagerName();
+        this.address = address;
         this.connectorTypeQualifiedName = connectorTypeQualifiedName;
+        this.catalog = catalog;
         this.transferCustomizations = transferCustomizations;
         this.auditLog = auditLog;
     }
@@ -62,7 +69,7 @@ public class JdbcMetadataTransfer {
     public void execute() {
         String methodName = "JdbcMetadataTransfer.execute";
 
-        DatabaseElement database = new DatabaseTransfer(jdbc, omas, auditLog).execute();
+        DatabaseElement database = new DatabaseTransfer(jdbc, databaseManagerName, address, catalog, omas, auditLog).execute();
         if (database == null) {
             auditLog.logMessage("Verifying database metadata transferred. None found. Stopping transfer",
                     EXITING_ON_DATABASE_TRANSFER_FAIL.getMessageDefinition(methodName));
@@ -98,7 +105,6 @@ public class JdbcMetadataTransfer {
 
         String databaseQualifiedName = databaseElement.getDatabaseProperties().getQualifiedName();
         String databaseGuid = databaseElement.getElementHeader().getGUID();
-        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         // already known tables by the omas, previously transferred
         List<DatabaseTableElement> omasTables = omas.getTables(databaseGuid);
@@ -135,7 +141,6 @@ public class JdbcMetadataTransfer {
 
         String databaseQualifiedName = databaseElement.getDatabaseProperties().getQualifiedName();
         String databaseGuid = databaseElement.getElementHeader().getGUID();
-        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         // already known views by the omas, previously transferred
         List<DatabaseViewElement> omasViews = omas.getViews(databaseGuid);
@@ -170,7 +175,6 @@ public class JdbcMetadataTransfer {
         long start = System.currentTimeMillis();
 
         String databaseGuid = databaseElement.getElementHeader().getGUID();
-        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         omas.getTables(databaseGuid).parallelStream()
                 .filter(table -> transferCustomizations.shouldTransferTable(table.getDatabaseTableProperties().getDisplayName()))
@@ -212,8 +216,6 @@ public class JdbcMetadataTransfer {
     private void transferForeignKeysIgnoringSchemas(DatabaseElement databaseElement){
         long start = System.currentTimeMillis();
 
-        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
-
         Set<JdbcForeignKey> foreignKeys = Stream.concat(
                         jdbc.getTables(catalog, "").stream()
                                 .filter(table -> transferCustomizations.shouldTransferTable(table.getTableName()))
@@ -247,7 +249,6 @@ public class JdbcMetadataTransfer {
 
         String databaseQualifiedName = databaseElement.getDatabaseProperties().getQualifiedName();
         String databaseGuid = databaseElement.getElementHeader().getGUID();
-        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         // already known schemas by the omas, previously transferred
         List<DatabaseSchemaElement> omasSchemas = omas.getSchemas(databaseGuid);
@@ -281,8 +282,6 @@ public class JdbcMetadataTransfer {
      */
     private void transferTables(DatabaseElement databaseElement, List<DatabaseSchemaElement> schemas){
         long start = System.currentTimeMillis();
-
-        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         schemas.parallelStream()
                 .filter(schema -> transferCustomizations.shouldTransferSchema(schema.getDatabaseSchemaProperties().getDisplayName()))
@@ -324,8 +323,6 @@ public class JdbcMetadataTransfer {
     private void transferViews(DatabaseElement databaseElement, List<DatabaseSchemaElement> schemas){
         long start = System.currentTimeMillis();
 
-        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
-
         schemas.parallelStream()
                 .filter(schema -> transferCustomizations.shouldTransferSchema(schema.getDatabaseSchemaProperties().getDisplayName()))
                 .peek(schema -> {
@@ -366,14 +363,12 @@ public class JdbcMetadataTransfer {
     private void transferColumns(DatabaseElement databaseElement, List<DatabaseSchemaElement> schemas){
         long start = System.currentTimeMillis();
 
-        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
-
          schemas.parallelStream()
                  .filter(schema -> transferCustomizations.shouldTransferSchema(schema.getDatabaseSchemaProperties().getDisplayName()))
                  .flatMap(s -> omas.getTables(s.getElementHeader().getGUID()).parallelStream())
                  .filter(table -> transferCustomizations.shouldTransferTable(table.getDatabaseTableProperties().getDisplayName()))
                  .peek(table -> {
-                     String schemaName = table.getDatabaseTableProperties().getQualifiedName().split("::")[1];
+                     String schemaName = table.getDatabaseTableProperties().getAdditionalProperties().get(Jdbc.JDBC_SCHEMA_KEY);
                      String tableName = table.getDatabaseTableProperties().getDisplayName();
                      String tableGuid = table.getElementHeader().getGUID();
 
@@ -409,8 +404,6 @@ public class JdbcMetadataTransfer {
      */
     private void transferForeignKeys(DatabaseElement databaseElement){
         long start = System.currentTimeMillis();
-
-        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         // all foreign keys as returned by calling getExportedKeys and getImportedKeys on jdbc
         Set<JdbcForeignKey> foreignKeys = Stream.concat(

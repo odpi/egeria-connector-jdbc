@@ -8,11 +8,14 @@ import org.odpi.openmetadata.accessservices.datamanager.properties.DatabaseColum
 import org.odpi.openmetadata.accessservices.datamanager.properties.DatabasePrimaryKeyProperties;
 import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.model.JdbcColumn;
 import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.model.JdbcPrimaryKey;
+import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.requests.Jdbc;
 import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.requests.Omas;
 import org.odpi.openmetadata.frameworks.auditlog.AuditLog;
 
 import java.sql.JDBCType;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -80,10 +83,17 @@ public class ColumnTransfer implements Function<JdbcColumn, DatabaseColumnElemen
      * @return properties
      */
     private DatabaseColumnProperties buildColumnProperties(JdbcColumn jdbcColumn, DatabaseTableElement omasTable){
+        Map<String, String> additionalProperties = new HashMap<>();
+        additionalProperties.put(Jdbc.JDBC_CATALOG_KEY, jdbcColumn.getTableCat());
+        additionalProperties.put(Jdbc.JDBC_SCHEMA_KEY, jdbcColumn.getTableSchem());
+        additionalProperties.put(Jdbc.JDBC_TABLE_KEY, jdbcColumn.getTableName());
+        additionalProperties.put(Jdbc.JDBC_COLUMN_KEY, jdbcColumn.getColumnName());
+
         DatabaseColumnProperties properties = new DatabaseColumnProperties();
         properties.setDisplayName(jdbcColumn.getColumnName());
         properties.setQualifiedName(omasTable.getDatabaseTableProperties().getQualifiedName() + "::" + jdbcColumn.getColumnName());
         properties.setDataType(extractDataType(jdbcColumn.getDataType()));
+        properties.setAdditionalProperties(additionalProperties);
 
         return properties;
     }

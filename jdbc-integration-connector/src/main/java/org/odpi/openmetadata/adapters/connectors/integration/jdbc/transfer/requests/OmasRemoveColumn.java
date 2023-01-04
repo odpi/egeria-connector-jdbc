@@ -37,7 +37,7 @@ class OmasRemoveColumn implements Consumer<DatabaseColumnElement> {
         String columnQualifiedName = columnElement.getDatabaseColumnProperties().getQualifiedName();
         try {
             databaseIntegratorContext.removePrimaryKeyFromColumn(columnGuid);
-            databaseIntegratorContext.removeDatabaseColumn(columnGuid, columnQualifiedName);
+            databaseIntegratorContext.removeDatabaseColumn(columnGuid);
         } catch (InvalidParameterException | UserNotAuthorizedException | PropertyServerException e) {
             auditLog.logMessage("Removing column with guid " + columnGuid
                     + " and qualified name " + columnQualifiedName,

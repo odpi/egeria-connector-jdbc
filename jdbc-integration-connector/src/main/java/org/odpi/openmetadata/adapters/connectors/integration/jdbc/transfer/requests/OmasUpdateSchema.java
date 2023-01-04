@@ -30,7 +30,7 @@ class OmasUpdateSchema implements BiConsumer<String, DatabaseSchemaProperties> {
     public void accept(String schemaGuid, DatabaseSchemaProperties schemaProperties){
         String methodName = "OmasUpdateSchema";
         try {
-            databaseIntegratorContext.updateDatabaseSchema(schemaGuid, schemaProperties);
+            databaseIntegratorContext.updateDatabaseSchema(schemaGuid, false, schemaProperties);
         } catch (InvalidParameterException | UserNotAuthorizedException | PropertyServerException e) {
             auditLog.logException("Updating schema with qualifiedName " + schemaProperties.getQualifiedName()
                     + " and guid " + schemaGuid,

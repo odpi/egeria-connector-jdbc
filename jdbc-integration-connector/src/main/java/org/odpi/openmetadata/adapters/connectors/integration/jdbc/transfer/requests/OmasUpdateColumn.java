@@ -36,7 +36,7 @@ class OmasUpdateColumn implements BiConsumer<String, DatabaseColumnProperties> {
     public void accept(String columnGuid, DatabaseColumnProperties columnProperties){
         String methodName = "OmasUpdateColumn";
         try {
-            databaseIntegratorContext.updateDatabaseColumn(columnGuid, columnProperties);
+            databaseIntegratorContext.updateDatabaseColumn(columnGuid, false, columnProperties);
         } catch (InvalidParameterException | UserNotAuthorizedException | PropertyServerException e) {
             auditLog.logException("Updating column with qualifiedName " + columnProperties.getQualifiedName()
                     + " and guid " + columnGuid,

@@ -41,7 +41,7 @@ class OmasRemoveSchema implements Consumer<DatabaseSchemaElement> {
             List<DatabaseTableElement> tables = new OmasGetTables(databaseIntegratorContext, auditLog).apply(schemaGuid);
             tables.forEach(new OmasRemoveTable(databaseIntegratorContext, auditLog));
 
-            databaseIntegratorContext.removeDatabaseSchema(schemaGuid, schemaQualifiedName);
+            databaseIntegratorContext.removeDatabaseSchema(schemaGuid);
         } catch (InvalidParameterException | UserNotAuthorizedException | PropertyServerException e) {
             auditLog.logMessage("Removing schema with guid " + schemaGuid
                     + " and qualified name " + schemaQualifiedName,

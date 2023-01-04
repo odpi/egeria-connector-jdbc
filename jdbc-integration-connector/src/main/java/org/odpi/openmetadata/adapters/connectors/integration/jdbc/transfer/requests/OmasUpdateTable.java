@@ -30,7 +30,7 @@ class OmasUpdateTable implements BiConsumer<String, DatabaseTableProperties> {
     public void accept(String tableGuid, DatabaseTableProperties tableProperties){
         String methodName = "OmasUpdateTable";
         try {
-            databaseIntegratorContext.updateDatabaseTable(tableGuid, tableProperties);
+            databaseIntegratorContext.updateDatabaseTable(tableGuid, false, tableProperties);
         } catch (InvalidParameterException | UserNotAuthorizedException | PropertyServerException e) {
             auditLog.logException("Updating table with qualifiedName " + tableProperties.getQualifiedName()
                     + " and guid " + tableGuid,

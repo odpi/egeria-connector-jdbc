@@ -5,10 +5,13 @@ package org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer;
 import org.odpi.openmetadata.accessservices.datamanager.metadataelements.DatabaseViewElement;
 import org.odpi.openmetadata.accessservices.datamanager.properties.DatabaseViewProperties;
 import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.model.JdbcTable;
+import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.requests.Jdbc;
 import org.odpi.openmetadata.adapters.connectors.integration.jdbc.transfer.requests.Omas;
 import org.odpi.openmetadata.frameworks.auditlog.AuditLog;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -69,9 +72,16 @@ public class ViewTransfer implements Function<JdbcTable, DatabaseViewElement> {
      * @return properties
      */
     private DatabaseViewProperties buildViewProperties(JdbcTable jdbcTable){
+        Map<String, String> additionalProperties = new HashMap<>();
+        additionalProperties.put(Jdbc.JDBC_CATALOG_KEY, jdbcTable.getTableCat());
+        additionalProperties.put(Jdbc.JDBC_SCHEMA_KEY, jdbcTable.getTableSchem());
+        additionalProperties.put(Jdbc.JDBC_TABLE_KEY, jdbcTable.getTableName());
+        additionalProperties.put(Jdbc.JDBC_TABLE_TYPE_KEY, jdbcTable.getTableType());
+
         DatabaseViewProperties jdbcViewProperties = new DatabaseViewProperties();
         jdbcViewProperties.setDisplayName(jdbcTable.getTableName());
         jdbcViewProperties.setQualifiedName(parentQualifiedName + "::" + jdbcTable.getTableName());
+        jdbcViewProperties.setAdditionalProperties(additionalProperties);
         return jdbcViewProperties;
     }
 
