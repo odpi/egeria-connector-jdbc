@@ -105,7 +105,6 @@ public class JdbcMetadataTransfer {
 
         String databaseQualifiedName = databaseElement.getDatabaseProperties().getQualifiedName();
         String databaseGuid = databaseElement.getElementHeader().getGUID();
-//        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         // already known tables by the omas, previously transferred
         List<DatabaseTableElement> omasTables = omas.getTables(databaseGuid);
@@ -142,7 +141,6 @@ public class JdbcMetadataTransfer {
 
         String databaseQualifiedName = databaseElement.getDatabaseProperties().getQualifiedName();
         String databaseGuid = databaseElement.getElementHeader().getGUID();
-//        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         // already known views by the omas, previously transferred
         List<DatabaseViewElement> omasViews = omas.getViews(databaseGuid);
@@ -177,7 +175,6 @@ public class JdbcMetadataTransfer {
         long start = System.currentTimeMillis();
 
         String databaseGuid = databaseElement.getElementHeader().getGUID();
-//        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         omas.getTables(databaseGuid).parallelStream()
                 .filter(table -> transferCustomizations.shouldTransferTable(table.getDatabaseTableProperties().getDisplayName()))
@@ -219,8 +216,6 @@ public class JdbcMetadataTransfer {
     private void transferForeignKeysIgnoringSchemas(DatabaseElement databaseElement){
         long start = System.currentTimeMillis();
 
-//        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
-
         Set<JdbcForeignKey> foreignKeys = Stream.concat(
                         jdbc.getTables(catalog, "").stream()
                                 .filter(table -> transferCustomizations.shouldTransferTable(table.getTableName()))
@@ -254,7 +249,6 @@ public class JdbcMetadataTransfer {
 
         String databaseQualifiedName = databaseElement.getDatabaseProperties().getQualifiedName();
         String databaseGuid = databaseElement.getElementHeader().getGUID();
-//        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         // already known schemas by the omas, previously transferred
         List<DatabaseSchemaElement> omasSchemas = omas.getSchemas(databaseGuid);
@@ -288,8 +282,6 @@ public class JdbcMetadataTransfer {
      */
     private void transferTables(DatabaseElement databaseElement, List<DatabaseSchemaElement> schemas){
         long start = System.currentTimeMillis();
-
-//        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         schemas.parallelStream()
                 .filter(schema -> transferCustomizations.shouldTransferSchema(schema.getDatabaseSchemaProperties().getDisplayName()))
@@ -331,8 +323,6 @@ public class JdbcMetadataTransfer {
     private void transferViews(DatabaseElement databaseElement, List<DatabaseSchemaElement> schemas){
         long start = System.currentTimeMillis();
 
-//        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
-
         schemas.parallelStream()
                 .filter(schema -> transferCustomizations.shouldTransferSchema(schema.getDatabaseSchemaProperties().getDisplayName()))
                 .peek(schema -> {
@@ -372,8 +362,6 @@ public class JdbcMetadataTransfer {
      */
     private void transferColumns(DatabaseElement databaseElement, List<DatabaseSchemaElement> schemas){
         long start = System.currentTimeMillis();
-
-//        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
          schemas.parallelStream()
                  .filter(schema -> transferCustomizations.shouldTransferSchema(schema.getDatabaseSchemaProperties().getDisplayName()))
@@ -416,8 +404,6 @@ public class JdbcMetadataTransfer {
      */
     private void transferForeignKeys(DatabaseElement databaseElement){
         long start = System.currentTimeMillis();
-
-//        String catalog = databaseElement.getDatabaseProperties().getDisplayName();
 
         // all foreign keys as returned by calling getExportedKeys and getImportedKeys on jdbc
         Set<JdbcForeignKey> foreignKeys = Stream.concat(
