@@ -75,7 +75,7 @@ public class JdbcIntegrationConnector extends DatabaseIntegratorConnector{
             return jdbcConnector.asDataSource().getConnection();
         } catch (SQLException sqlException) {
             auditLog.logException("Connecting to target database server",
-                    EXCEPTION_READING_JDBC.getMessageDefinition(methodName), sqlException);
+                    EXCEPTION_READING_JDBC.getMessageDefinition(methodName, sqlException.getMessage()), sqlException);
         }
         return null;
     }
@@ -88,7 +88,7 @@ public class JdbcIntegrationConnector extends DatabaseIntegratorConnector{
             }
         } catch (SQLException sqlException) {
             auditLog.logException("Closing connection to database server",
-                    EXCEPTION_READING_JDBC.getMessageDefinition(methodName), sqlException);
+                    EXCEPTION_READING_JDBC.getMessageDefinition(methodName, sqlException.getMessage()), sqlException);
         }
     }
 
@@ -98,7 +98,7 @@ public class JdbcIntegrationConnector extends DatabaseIntegratorConnector{
             return connection.getMetaData();
         }catch (SQLException sqlException){
             auditLog.logException("Extracting database metadata",
-                    EXCEPTION_READING_JDBC.getMessageDefinition(methodName), sqlException);
+                    EXCEPTION_READING_JDBC.getMessageDefinition(methodName, sqlException.getMessage()), sqlException);
         }
         return null;
     }
@@ -110,7 +110,7 @@ public class JdbcIntegrationConnector extends DatabaseIntegratorConnector{
             return true;
         } catch (SQLException sqlException) {
             auditLog.logException("Extracting database metadata",
-                    EXCEPTION_READING_JDBC.getMessageDefinition(methodName), sqlException);
+                    EXCEPTION_READING_JDBC.getMessageDefinition(methodName, sqlException.getMessage()), sqlException);
         }
         return false;
     }
