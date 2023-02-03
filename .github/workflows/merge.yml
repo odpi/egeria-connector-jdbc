@@ -71,6 +71,9 @@ jobs:
           push: true
           tags: odpi/egeria:${{ env.VERSION }}, odpi/egeria:latest, quay.io/odpi/egeria-connector-jdbc:${{ env.VERSION }}, quay.io/odpi/egeria-connector-jdbc:latest
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            EGERIA_BASE_IMAGE=${{ env.EGERIA_BASE_IMAGE }}
+            VERSION=${{ env.VERSION }}
       - name: Build and push( to quay.io and docker.io (no tag latest)
         if: ${{ github.ref != 'refs/heads/main'}}
         uses: docker/build-push-action@v3
@@ -79,6 +82,9 @@ jobs:
           push: true
           tags: odpi/egeria:${{ env.VERSION }}, quay.io/odpi/egeria-connector-jdbc:${{ env.VERSION }}
           platforms: linux/amd64,linux/arm64
+          build-args: |
+            EGERIA_BASE_IMAGE=${{ env.EGERIA_BASE_IMAGE }}
+            VERSION=${{ env.VERSION }}
       # --
       - name: Upload Connector
         uses: actions/upload-artifact@v3
