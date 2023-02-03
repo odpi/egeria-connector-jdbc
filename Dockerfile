@@ -16,6 +16,7 @@ LABEL org.opencontainers.image.description = "Egeria with JDBC connector" \
 # This assumes we only have one uber jar (ensure old versions cleaned out beforehand). Avoids having to pass connector version
 
 # Note that we currently only build a simple jar. If additional dependencies are needed, a jar with dependencies will be needed, or the libraries will need to be added here
+ENV VERSION ${VERSION}
 
 COPY jdbc-resource-connector/build/libs/egeria-connector-resource-jdbc-${VERSION}.jar /deployments/server/lib
 COPY jdbc-integration-connector/build/libs/egeria-connector-integration-jdbc-${VERSION}.jar /deployments/server/lib
