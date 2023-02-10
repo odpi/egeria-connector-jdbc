@@ -164,7 +164,7 @@ subprojects {
                 }
                 // Override the project name & description for the pom based on properties set in the child build.gradle (hard to default & required for maven central)
                 pom.withXml {
-                    //asNode().appendNode('name', "${project.name}")
+                    asNode().appendNode('name', "${project.name}")
                     asNode().appendNode('description', "${project.description}")
                 }
             }
