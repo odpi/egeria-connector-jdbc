@@ -38,7 +38,8 @@ allprojects {
     // Only use maven central and snapshots
     repositories {
         mavenCentral()
-        maven { url("https://oss.sonatype.org/content/repositories/snapshots") }
+        // only needed if building against egeria snapshot versions
+        //maven { url("https://oss.sonatype.org/content/repositories/snapshots") }
     }
 
     // ensures we pick up the very latest snapshots when built
@@ -55,15 +56,13 @@ allprojects {
     ext {
         // add version variables here
         egeriaversion='3.15'
-        jacksonVersion = '2.14.2'
     }
 
     dependencies {
         implementation platform("org.odpi.egeria:egeria:${egeriaversion}")
         constraints {
-            implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
-            implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-            implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+            // Add any extra dependencies here. Most constraints are
+            // imported from the platform spec above
         }
     }
 
@@ -98,8 +97,8 @@ allprojects {
             includeEngines 'junit-jupiter'
         }
         dependencies {
-            testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-            testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+            testImplementation 'org.junit.jupiter:junit-jupiter-api'
+            testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
         }
 
         testLogging {
