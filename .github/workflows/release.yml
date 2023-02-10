@@ -30,7 +30,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: false
-          arguments:  publish        # Import secrets needed for code signing and distribution
+          arguments:  publish -Dorg.gradle.parallel=false -Dorg.gradle.caching=false
+
+        # Import secrets needed for code signing and distribution
         env:
           OSSRH_GPG_KEYID: ${{ secrets.OSSRH_GPG_KEYID }}
           OSSRH_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_PASSPHRASE }}
