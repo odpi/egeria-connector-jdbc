@@ -112,6 +112,25 @@ allprojects {
     /*
      * Publishing of maven artifacts -- and signing (only for CI)
      */
+
+
+    /*
+     * Additional useful tasks
+     */
+    task printAllDependencies(type: DependencyReportTask) {}
+    task printSubDependencies(type: DependencyReportTask) {}
+    task findDependency(type: DependencyInsightReportTask) {}
+
+} // end of allProjects
+
+
+/*
+ * Configuration for sub projects only
+ */
+subprojects {
+    // All tasks currently will run under allProjects - which includes root.
+    apply plugin: 'maven-publish'
+
     if (System.getenv("CI")) {
         apply plugin: 'signing'
     }
@@ -173,21 +192,6 @@ allprojects {
         }
     }
 
-    /*
-     * Additional useful tasks
-     */
-    task printAllDependencies(type: DependencyReportTask) {}
-    task printSubDependencies(type: DependencyReportTask) {}
-    task findDependency(type: DependencyInsightReportTask) {}
-
-} // end of allProjects
-
-
-/*
- * Configuration for sub projects only
- */
-subprojects {
-    // All tasks currently will run under allProjects - which includes root.
 }
 
 
