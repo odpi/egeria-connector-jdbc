@@ -14,6 +14,12 @@ dependencies {
     compileOnly 'org.odpi.egeria:data-manager-api'
     compileOnly 'org.odpi.egeria:database-integrator-api'
     compileOnly 'org.odpi.egeria:open-connector-framework'
+    compileOnly 'org.odpi.egeria:audit-log-framework'
+    compileOnly 'org.odpi.egeria:repository-services-apis'
+    compileOnly 'org.odpi.egeria:open-integration-framework'
+    compileOnly 'org.apache.commons:commons-lang3'
+    compileOnly 'org.apache.commons:commons-collections4'
     implementation project(':egeria-connector-resource-jdbc')
+    compileOnly 'com.fasterxml.jackson.core:jackson-annotations'
 }
 

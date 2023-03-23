@@ -11,5 +11,6 @@ dependencies {
     implementation 'org.slf4j:slf4j-api'
     compileOnly 'org.odpi.egeria:open-connector-framework'
     compileOnly 'org.odpi.egeria:audit-log-framework'
+    compileOnly 'com.fasterxml.jackson.core:jackson-annotations'
 }
 

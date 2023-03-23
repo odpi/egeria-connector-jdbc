@@ -8,12 +8,15 @@
  * Plugins for this parent module only - so just high level project related
  */
 plugins {
-    id "io.freefair.aggregate-javadoc" version "6.6.3"
-    // Checks for unnecessary dependencies
+    id 'java-library'
+    id "com.github.johnrengelman.shadow" version "8.1.0"
+    id 'idea'
+    id 'maven-publish'
+    // Checks for unnecessary & problematic dependencies
     id 'com.autonomousapps.dependency-analysis' version "1.19.0"
     // helps resolve log implementation clashes
     id 'dev.jacomet.logging-capabilities' version "0.11.0"
-    // This plugin helps resolve jakarta/javax dev.jacomet.logging-capabilities
+    // This plugin helps resolve jakarta/javax clashes
     id 'org.gradlex.java-ecosystem-capabilities' version "1.1"
 }
 
@@ -25,7 +28,7 @@ plugins {
 allprojects {
 
     group = 'org.odpi.egeria'
-    version = '1.0'
+    version = '1.1-SNAPSHOT'
 
     // Mostly java, so default to this for now
     apply plugin: 'java'
@@ -39,7 +42,7 @@ allprojects {
     repositories {
         mavenCentral()
         // only needed if building against egeria snapshot versions
-        //maven { url("https://oss.sonatype.org/content/repositories/snapshots") }
+        maven { url("https://oss.sonatype.org/content/repositories/snapshots") }
     }
 
     // ensures we pick up the very latest snapshots when built
@@ -55,7 +58,7 @@ allprojects {
     // Assign variables for any constraints
     ext {
         // add version variables here
-        egeriaversion='3.15'
+        egeriaversion='4.0-SNAPSHOT'
     }
 
     dependencies {
@@ -74,7 +77,7 @@ allprojects {
         withJavadocJar()
     }
     tasks.withType(JavaCompile) {
-        options.release = 11
+        options.release = 17
         options.encoding = 'UTF-8'
         options.incremental = true
         options.failOnError = true
@@ -96,15 +99,9 @@ allprojects {
         useJUnitPlatform {
             includeEngines 'junit-jupiter'
         }
-        dependencies {
-            testImplementation 'org.junit.jupiter:junit-jupiter-api'
-            testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-        }
-
         testLogging {
             events "passed", "skipped", "failed"
         }
-
         reports {
             html.required = true
         }
@@ -243,9 +240,6 @@ dependencyAnalysis {
         all {
             onAny {
                 severity('fail')
-            }
-            onUnusedDependencies {
-                exclude("junit:junit", "org.junit.jupiter:junit-jupiter-api", "org.junit.jupiter:junit-jupiter-engine", "com.fasterxml.jackson.core:jackson-annotations")
             }
         }
     }
