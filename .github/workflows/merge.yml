@@ -95,4 +95,3 @@ jobs:
           # TODO: merge - Update name & artifacts to upload
           name: Jar
           path: '**/build/libs/*.jar'
-
