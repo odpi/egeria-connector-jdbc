@@ -2,12 +2,14 @@
 # Copyright Contributors to the Egeria project
 
 # This is the EGERIA version - typically passed from the ci/cd pipeline
-ARG EGERIA_BASE_IMAGE=quay.io/odpi/egeria:latest
-ARG EGERIA_VERSION=latest
-# Must be set to help get the right files for the connextors
+ARG EGERIA_VERSION=4.0
+ARG EGERIA_BASE_IMAGE=quay.io/odpi/egeria:${EGERIA_VERSION}
+ARG CONNECTOR_VERSION=1.1
+# Default app user defined in the base redhat docker image ubi9/openjdk-17-runtime
+ARG APP_USER=185
 
+# Must be set to help get the right files for the connextors
 FROM ${EGERIA_BASE_IMAGE}:${EGERIA_VERSION}
-ARG CONNECTOR_VERSION=0.1-SNAPSHOT
 
 # Labels from https://github.com/opencontainers/image-spec/blob/master/annotations.md#pre-defined-annotation-keys (with additions prefixed    ext)
 # We should inherit all the base labels from the egeria image and only overwrite what is necessary.
@@ -30,4 +32,4 @@ USER root
 RUN (cd /deployments/server/lib && curl -O -J https://jdbc.postgresql.org/download/postgresql-42.5.2.jar)
 
 # Restore the standard id for container execution
-USER jboss
+USER ${APP_USER}
