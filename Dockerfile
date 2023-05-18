@@ -2,9 +2,9 @@
 # Copyright Contributors to the Egeria project
 
 # This is the EGERIA version - typically passed from the ci/cd pipeline
-ARG EGERIA_VERSION=3.15
+ARG EGERIA_VERSION=4.0
 ARG EGERIA_BASE_IMAGE=quay.io/odpi/egeria:${EGERIA_VERSION}
-ARG CONNECTOR_VERSION=1.0
+ARG CONNECTOR_VERSION=1.1
 # Default app user defined in the base redhat docker image ubi9/openjdk-17-runtime
 ARG APP_USER=185
 
