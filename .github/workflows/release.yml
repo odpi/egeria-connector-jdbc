@@ -69,9 +69,9 @@ jobs:
           tags: odpi/egeria-connector-jdbc::${{ env.CONNECTOR_VERSION }}, quay.io/odpi/egeria-connector-jdbc:${{ env.CONNECTOR_VERSION }}
           platforms: linux/amd64,linux/arm64
           build-args: |
-            EGERIA_BASE_IMAGE=${{ env.EGERIA_BASE_IMAGE }}
-            CONNECTOR_VERSION=${{ env.CONNECTOR_VERSION }}
-            EGERIA_VERSION=${{ env.EGERIA_VERSION }}
+            egeria_base_image=${{ env.EGERIA_BASE_IMAGE }}
+            connector_version=${{ env.CONNECTOR_VERSION }}
+            egeria_version=${{ env.EGERIA_VERSION }}
       # Upload the library so that build results can be viewed
       - name: Upload Connector
         uses: actions/upload-artifact@v3
