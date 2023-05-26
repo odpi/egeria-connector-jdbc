@@ -4,11 +4,11 @@
 # Image base default for building the connector image
 ARG egeria_base_image=quay.io/odpi/egeria
 # Egeria base image version to extend
-ARG egeria_version=4.0
+ARG egeria_version=4.1-SNAPSHOT
 # Must be set to help get the right files for the connextors
 FROM ${egeria_base_image}:${egeria_version}
 # Egeria connector default version, arg passed from ci/cd will overwrite this value
-ARG connector_version=1.1
+ARG connector_version=1.2-SNAPSHOT
 # Default app user defined in the base redhat docker image ubi9/openjdk-17-runtime
 ARG app_user=185
 
