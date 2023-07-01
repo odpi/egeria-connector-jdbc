@@ -58,7 +58,7 @@ allprojects {
     // Assign variables for any constraints
     ext {
         // add version variables here
-        egeriaversion='4.1-SNAPSHOT'
+        egeriaversion='4.2-SNAPSHOT'
     }
 
     dependencies {
