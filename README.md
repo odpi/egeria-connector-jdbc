@@ -9,20 +9,21 @@
 [![Maven Central - JDBC resource connector](https://img.shields.io/maven-central/v/org.odpi.egeria/egeria-connector-resource-jdbc)](https://mvnrepository.com/artifact/org.odpi.egeria/egeria-connector-resource-jdbc)
 
 # Egeria - Open Metadata and Governance
-  
-Egeria provides the Apache 2.0 licensed open metadata and governance 
+
+Egeria provides the Apache 2.0 licensed open metadata and governance
 type system, frameworks, APIs, event payloads and interchange protocols to enable tools,
 engines and platforms to exchange metadata in order to get the best
 value from data whilst ensuring it is properly governed.
 
-[Go to the main Egeria site](https://egeria-project.org)
+This repository contains the prototypes for several database connectors that are now incorporated into the main [Egeria Git Repository](https://github.com/odpi/egeria) as:
 
-This repository contains several database connectors, visit each of them for specific details: [jdbc integration connector](jdbc-integration-connector/README.MD), [jdbc resource connector](jdbc-resource-connector/README.MD)
+* [JDBC Resource Connector](https://github.com/odpi/egeria)
+* [JDBC Integration Connector](https://github.com/odpi/egeria/tree/main/open-metadata-implementation/adapters/open-connectors/integration-connectors/jdbc-integration-connector)
 
-Further information on configuring an integration connector can be found in  [Configuring the Integration Services](https://egeria-project.org/guides/admin/servers/configuring-the-integration-services/) .
+This repository is no longer maintained.  For more information about Egeria and its connectors:
 
-[Egeria's Connector Catalog](https://egeria-project.org/connectors/)
+* [Egeria's documentation](https://egeria-project.org)
+* [Egeria's Connector Catalog](https://egeria-project.org/connectors/)
 
 License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/),
 Copyright Contributors to the ODPi Egeria project.
-
